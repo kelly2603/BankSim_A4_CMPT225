@@ -1,0 +1,512 @@
+CMPT 225 notes
+
+4 steps of software development process:
+1. Problem Statement and requirements
+2. Design
+3. Implementation
+4. Compile and test
+
+Definitions:
+class invariant: something about a class that must always be true, for all objects of the class ex. max & min of a variable etc.
+
+
+==================== ABT - ABSTRACT DATA TYPE =======================
+Information hiding:
+- hide the data members (private section of class) and the implementation of its method (in a seperate file .cpp)
+- reducd complexity and allows easy modification
+- preserve the integrity of a class data
+- but more code to write
+
+Data Collection (ADT)(abstract data type) vs Data structure(CDT)(concerte data type):
+ADT:
+- models a collection of data
+- ex. List
+
+CDT:
+- constructs available as part of a programming language
+- ex. array, linked list (nodes and pointers)
+- used as member attributes (data) of an ADT
+- hidden behind the wall
+
+Categories of data organizations:
+linear:
+- data organization where each element has a predecessor and a successor, except the last and first elements
+non-linear:
+- no first or last element, no concept of predecessor or successor
+Hierarchical:
+- each elment has only one predecessor -> its parent (except the first element which has none) and up to many successors (except for the last element)
+- ex. trees
+Graph:
+- each element can have many predecessors and many successors
+
+List:
+2 kinds of list:
+Position-oriented:
+- operations done based on position of data
+- ex. insert an element at a given position in lisy e.g. insert to back or front
+- ex. remove front
+Value-oriented:
+- operations done based on value of data
+- ex. insert element in alphabetical order, remove specific element
+
+====================== ARRAY ======================
+- a CDT
+- contiguous memory locations are used when an array is allocated
+- indexed data structure
+- direct access
+
+What can we do with an array
+- insert
+- remove (simply overwrite instead of erase)
+- traverse
+- search for (find/get) an element, may not need to visit every element
+- expand (resize an array)
+- easier to manage when there are no gaps in the array
+
+Advantage:
+- indexing is time efficient
+- traversing an array is simple
+
+Disadvantage:
+- all elements must have the same data type
+- must keep track of size using a variable
+- size is required when creating an array
+- need to expand array when full - might be expensive 
+- no bound check - make sure index is within array siez
+
+Value-based array:
+- insert: O(n) -> find element -> shift elements to make room -> insert
+- remove: O(n) -> find element -> shift elements to overwrite it
+- traverse: O(n)
+- search: O(n) or O(logn)
+- expand (resize): 
+
+Stack vs heap allocated arrays
+when using heap-allocated array:
+- copy constructor
+- overload assignment operator
+- 'new' operator
+- destructor
+- delete[] operator
+
+====================== LINKED LIST ======================
+characteristic:
+adv:
+- flexible/unbounded size: grows, shrink as needed
+- operations on linked list do not require the shifting of elements
+disadv:
+- elements must be accessed in specific order
+
+What we can do with it:
+- insert
+- remove
+- search
+
+insert at front of list:
+Code:
+Node *newNode = new Node(newElement);
+if(newNode!=NULL){
+  newNode->next=head; //newNode next pointer is now pointing at the first node head was pointing to
+  head = newNode; head pointer is now pointing to newNode
+  elementCount++;
+}
+Time efficiency: O(1)
+
+Generalisation Principle
+check all stats a linked list can have:
+- is empty
+- has 1 element
+- has many elements
+
+Traverse a linked list:
+if(head!=NULL){
+  Node* current = head;
+  while(current->next!=NULL){
+    current=current->next;
+  }
+}
+
+append an element:
+Node *newNode = new Node(newElement);
+if(newNode != NULL)
+  if (head==NULL)
+    head=newNode;
+  else
+    Node* current=head;
+    while(curent->next != NULL)
+      current = current->next;
+    current->next=newNode;
+elementCount++;
+
+for value oriented linked list
+- more efficient to insert element in sort order of list rather than prepend then sort the whole list
+
+Issue with traverse and possible soluations:
+- using previous
+- adding another link into the list
+- using a look ahead mechanism
+
+
+Improving the insertion of an element at the end:
+- use doubly headed signly linked list (DHSL)
+
+Node *newNode= newNode(newElement);
+if (newNode!= NULL)
+  if (tail == NULL)  // or head == NULL
+    head = newNode;  //when List empty
+    tail = newNode;
+  else
+    tail->next = newNode;  
+    tail = newNode;
+  elementCount++;
+
+Adv: allows insertion at the end at O(1)
+Disadv: more code to develop, maintain and test (keep tail updated)
+
+Doubly headed Doubly linked list (DHDL):
+adv: allow removal of last element in O(1), or the traverse backwards more efficiently
+disadv: more code to develop and maintain (keep tail and second link updated)
+
+Singly headed Doubly inked list (SHDL):
+adv:
+
+Linked list are flexible:
+- can able make a circular list
+
+do not confuse
+data members of list ADT class: head, tail
+data members of Node class: next, back
+local variables of methods of List ADT class: current, previous
+
+
+Compare implementations of position-oriented list ADT class with Big O:
+
+
+
+Compiling and testing:
+test driver and test cases
+- each class must be tested by a test driver program
+- goals: call each method at least once
+- try to break the code using invalid data
+
+3 parts of a test case:
+- specific test data
+- expected results
+- actual results
+
+
+Documentation:
+- Header comment block: class/file name, class description, class invariant (if any), author, creation/modification date
+- Comments for each methods:
+  - description-> single responsibility
+  - precondition: what must be true before the method is called (still need to test at the begining)
+  - postcondition: what is true after the method has executed
+  - time efficiency (optional)
+  - exception handling
+
+======================== STACK ======================
+
+CHaracteristics of a stack:
+- Rule: elements are only to be isnerted and removed at one end -> top
+- no access to other elements
+- class invariant: LIFO or FILO
+- a linear data collection
+- not general purpose/flexible
+
+operations:
+- push: bool type, O(1)
+- pop: bool or elementType, O(1)
+- peek: ElementType, O(1)
+- isEmpty: bool type, O(1)
+- popAll: bool, O(1)
+
+Array based implementation:
+- private data members:
+const unsigned int SIZE;
+ElementType * elements;
+unsgined int top;
+
+Linked list based implementation:
+- should pick top at front to ensure O(1) for its operations
+- private data member:
+StackNode * head;
+
+list based implementation:
+adv:
+- simple implementation
+- using code (the list ADT class) that has already been tested
+disadv:
+- unless the list ADT class public interface states the time efficiency of its public methods, we will not be able to guaranty that the stack public methods will execute in  O(1)
+
+When stack adt class is appropriate
+- complier: checking brackets 
+- evaluating postfix expressions
+- finding our way through a maze
+- undo redo
+
+========================= QUEUE ==========================
+
+Characteristics:
+- insert at one end, remove at the other
+- FIFO, LILO (class invariant)
+- linear data collection
+- not general purpose and flexible
+
+Operations:
+- enqueue: bool O(1)
+- dequeue: bool O(1)
+- peek: O(1)
+- isEmpty: bool O(1)
+
+Array based implemenetation - circular array:
+code:
+private data members:
+const unsigned int INITIAL_SIZE = 8;
+unsigned int capacity = INITIAL_SIZE;
+ElementType*elements = nullptr;
+unsigned intfront = 0;
+unsigned int back = 0; 
+unsigned int elementCount= 0;
+
+enqueue(…):
+if FULL -> expand or error
+elements[back] = newElement;
+back = (back+1) % capacity; // current size
+elementCount++;
+
+dequeue():
+if(isEmpty())->error
+front=(front+1)%capacity; //current size
+elementCount--;
+
+
+Linked based:
+- either insert or remove will be O(1) and the other will be O(n) depending on where the front and back of the queue is (for SHSL list)
+- 
+
+class Queue {
+private:
+  List * elements;
+public:  /* Queue public interface */
+  bool isEmpty( ) const;
+  bool enqueue(ElementType& newElement);
+  bool dequeue( );
+  bool dequeueAll( );
+  ElementType& peek( ) const;
+}; 
+
+Examples of using queue irl:
+- pipeline architecture
+- server requests
+- database request
+- operating systems to schedule jobs
+- event driven software
+- a line up
+
+======================= SEARCHING AND SORTING ALGORITHMS =======================
+
+Linear search:
+- compare target with each element until found
+- time efficiency: O(n)
+- space efficiency: O(1)
+
+Binary search:
+- compare middle then cut data in half everytime
+- Time efficiency: O(log2n)
+- space efficiency: O(1)
+- adv: much faster than linear search
+- disadv: more complicated to implement and test, data must be sorted
+
+Selection sort:
+- at each iteration: find smallest element then swap with the first element in the unsorted section
+- n(n-1)/2 comparisons, n-1 swapping
+- overall time complexity O(n^2)
+- inplace algo. -> does not require more space
+- the way data is organzied does not affect selection sort
+- unstable
+
+code:
+selectionSort(arr)
+    n = length(arr)
+    for i from 0 to n - 1
+        // Find the index of the minimum element in the unsorted part
+        minIndex = i
+        for j from i + 1 to n - 1
+            if arr[j] < arr[minIndex]
+                minIndex = j
+            end if
+        end for
+        
+        // Swap the minimum element with the current element
+        if minIndex != i
+            swap(arr[i], arr[minIndex])
+        end if
+    end for
+end procedure
+
+
+Insertion sort:
+- first consider the first element to be sorted
+- at each iteration: put first element in unsorted section in a temp var., comparing it with each element from sorted section, when found its place, elements in the sorted section get shifted up one position starting with last element in this section, to make space for the element being inserted
+- in place: no additional space needed
+- worst case: n(n-1)/2 comparisons, n(n-1)/2 shift   (data in reverse order)
+- best case: n-1 comparisons, 0 shift     (data in order)
+- is effected by how data is organized
+- Overall time efficiency: O(n^2)
+- stable
+
+code:
+insertionSort(arr)
+    for i from 1 to length(arr) - 1
+        currentElement = arr[i]
+        j = i - 1
+        while j >= 0 and arr[j] > currentElement
+            arr[j + 1] = arr[j]
+            j = j - 1
+        end while
+        arr[j + 1] = currentElement
+    end for
+end procedure
+
+
+Quicksort:
+- in place algorithm
+- selects pivot
+- partition array around pivot (smaller elements on one side, bigger on one side)
+- pick pivots in the two partitioned arrays and repeat process
+- best case: (n-1)*ceil(log2n) operations
+- overall time efficiency: O(nlogn)
+- unstable
+
+Lomuto partition scheme:
+quicksort(A, lo, hi)
+   if lo < hi then
+      p = partition(A, lo, hi)
+      quicksort(A, lo, p-1)
+      quicksort(A, p+1, hi)
+
+partition(A, lo, hi)
+   pivot = A[hi]
+   i = lo
+   for j = lo to hi-1 do
+      if A[j] < pivot then
+         swap A[i] with A[j]
+         i = i + 1
+   swap A[i] with A[hi]
+   retun i
+
+
+Hoare partition scheme:
+quicksort(A, lo, hi)
+   if lo < hi then
+      p = partition(A, lo, hi)
+      quicksort(A, lo, p)
+      quicksort(A, p+1, hi)
+
+partition(A, lo, hi)
+   pivot = A[(lo + hi)/2]
+   i = lo - 1
+   j = hi + 1
+   loop forever
+      while A[i] < pivot do
+         i = i + 1
+      
+      while A[j] > pivot do
+         j = j - 1
+
+      if i >= j then return j
+
+      swap A[i] with A[j]
+      
+       
+
+
+Stability of sorting algo:
+- concerned with how algos. treats equal/repeated elements
+- stable algos preserve the order of equal elements
+
+
+========================= EXCEPTION HANDLING ======================
+
+Exceptions are objects instantiated from an exception class
+
+logic_error is a class defined in the include file
+    #include "EmptyDataCollectionException.h"
+
+class definition from header file:
+class EmptyDataCollectionException : public logic_error
+
+function call:
+throw EmptyDataCollectionException("function called with empty queue");
+
+construtor definition:
+EmptyDataCollectionException::EmptyDataCollectionException(const string&message): 
+logic_error("Empty Data Collection ADT Class Exception: " + message)
+
+wrap function that could potentially throw an exception in a try block (use this in the test driver .pp file)
+
+try {
+  cout << "Peeking after enqueuing:" << endl;
+  peekedProfile = aQueue->peek();
+  cout << "Now, let's have a look at the peeked Profile:" << endl;  
+  cout << peekedProfile << endl;
+}
+catch  (EmptyDataCollectionException& anException){
+  cout << "peek() unsuccessful because " << anException.what() << endl;
+  // Place recovery code here!
+}
+catch (ExceptionType2 ex2){
+  //Handle ExceptionType 2
+}
+
+if the function throws an exception, the execution flows from the call from the function to the matching catch block, skipping any statements between them
+
+if the function call doesnt throw any exceptions the code inside the try block will behave like normal and skip all catch blocks
+
+example of a recovery code:
+- file could not be opened->asks user to enter another filename and try to open file for reading
+
+
+======================== TEMPLATES ==========================
+
+- allows us to create data collection ADT classes (list, stack, queue, ..) such that they can contain objects of any class types or data types
+- can create listADT class without making modifications to this class
+
+- instead of storing a copy of an object into the data member data in our Node, can store its reference, which will give access to initial data object as opposed to a copy of it
+
+- can use any name as a placeholder for the data type
+
+
+
+
+
+
+
+
+
+========================== EXTRAS ============================
+
+input redirection:
+$ ./td < testData1.in   //redirect contents of file testData1.in as input to executable td
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
