@@ -1,4 +1,4 @@
-# BankSim_A4_CMPT225
+# Bank Simulation Application
 
 ## Abstract
 
